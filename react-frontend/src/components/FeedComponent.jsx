@@ -7,7 +7,7 @@ function FeedComponent() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
+    fetch("http://127.0.0.1:5000/feed")
       .then(res => {
         if (!res.ok) throw new Error("Network response was not ok");
         return res.json();
@@ -28,8 +28,8 @@ function FeedComponent() {
   return ( 
     <marquee>
       <div>
-        {data.map(item => (
-          <span key={item.id}>{item.title} * </span>
+        {data["entries"].map(item => (
+            <span key={item.id}><a href={item.link}>{item.title}</a> * </span>
         ))}
       </div>
     </marquee>

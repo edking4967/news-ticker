@@ -1,14 +1,18 @@
-import json
+import json, requests, feedparser
 from flask import Flask
-from parse import getRss, getXml, getJson
+from flask_cors import CORS
 
 app = Flask(__name__)
 
+CORS(app)   # allow all origins (dev only)
+
 @app.route("/feed")
 def feed():
-    r = getRss("https://feeds.simplecast.com/54nAGcIl")
-    root = getXml(r.content)
-    return getJson(root)
+    url = "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
+    response = requests.get(url, timeout=5) # Takes a long time 
+    response.raise_for_status()  # raises error if download failed
+    feed = feedparser.parse(response.content)
+    return feed
 
 @app.route("/")
 def hello_world():
